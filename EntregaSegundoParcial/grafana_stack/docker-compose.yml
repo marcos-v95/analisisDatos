@@ -1,0 +1,36 @@
+# Stack del Dashboard de Gestión Académica (TPI - TUP)
+# Levanta PostgreSQL (con los datos limpios) + Grafana (con el tablero ya provisionado).
+# Uso:  docker compose up -d   ->   abrir http://localhost:3000  (admin / admin)
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: tup_postgres
+    environment:
+      POSTGRES_USER: tup
+      POSTGRES_PASSWORD: tup2025
+      POSTGRES_DB: academia
+    volumes:
+      - ./data:/data:ro
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U tup -d academia"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  grafana:
+    image: grafana/grafana:11.1.0
+    container_name: tup_grafana
+    ports:
+      - "3000:3000"
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+      GF_USERS_DEFAULT_THEME: dark
+    volumes:
+      - ./provisioning:/etc/grafana/provisioning:ro
+    depends_on:
+      postgres:
+        condition: service_healthy

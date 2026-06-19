@@ -1,0 +1,576 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 1,
+  "id": null,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "id": 1,
+      "title": "Total de Cursos",
+      "type": "stat",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "tup-postgres"
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 0,
+        "y": 0
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "tup-postgres"
+          },
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT COUNT(*) AS \"Total Cursos\" FROM cursos WHERE nivel_label IN (${nivel:sqlstring}) AND segmento_precio IN (${segmento:sqlstring});"
+        }
+      ],
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "orientation": "auto",
+        "textMode": "value_and_name",
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "blue"
+          },
+          "unit": "none"
+        }
+      }
+    },
+    {
+      "id": 2,
+      "title": "Calificación Promedio",
+      "type": "stat",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "tup-postgres"
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 6,
+        "y": 0
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "tup-postgres"
+          },
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT ROUND(AVG(reviews_avg)::numeric,2) AS \"Rating Promedio\" FROM cursos WHERE nivel_label IN (${nivel:sqlstring}) AND segmento_precio IN (${segmento:sqlstring});"
+        }
+      ],
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "orientation": "auto",
+        "textMode": "value_and_name",
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "unit": "none",
+          "min": 0,
+          "max": 5,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 3.5
+              },
+              {
+                "color": "green",
+                "value": 4.3
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 3,
+      "title": "Estudiantes Promedio",
+      "type": "stat",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "tup-postgres"
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 12,
+        "y": 0
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "tup-postgres"
+          },
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT ROUND(AVG(students_count)) AS \"Estudiantes Prom.\" FROM cursos WHERE nivel_label IN (${nivel:sqlstring}) AND segmento_precio IN (${segmento:sqlstring});"
+        }
+      ],
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "orientation": "auto",
+        "textMode": "value_and_name",
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "purple"
+          },
+          "unit": "short"
+        }
+      }
+    },
+    {
+      "id": 4,
+      "title": "% Cursos Bestseller",
+      "type": "stat",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "tup-postgres"
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 18,
+        "y": 0
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "tup-postgres"
+          },
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT ROUND(AVG(CASE WHEN course_flag='Bestseller' THEN 100.0 ELSE 0 END)::numeric,1) AS \"% Bestseller\" FROM cursos WHERE nivel_label IN (${nivel:sqlstring}) AND segmento_precio IN (${segmento:sqlstring});"
+        }
+      ],
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "orientation": "auto",
+        "textMode": "value_and_name",
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "orange"
+          },
+          "unit": "percent"
+        }
+      }
+    },
+    {
+      "id": 5,
+      "title": "Estudiantes Promedio por Nivel",
+      "type": "barchart",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "tup-postgres"
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 4
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "tup-postgres"
+          },
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT nivel_label AS \"Nivel\", ROUND(AVG(students_count)) AS \"Estudiantes\"\nFROM cursos WHERE nivel_label IN (${nivel:sqlstring}) AND segmento_precio IN (${segmento:sqlstring})\nGROUP BY nivel_label ORDER BY 2 DESC;"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-GrYlRd"
+          },
+          "unit": "short"
+        }
+      },
+      "options": {
+        "xField": "Nivel",
+        "orientation": "horizontal",
+        "showValue": "auto",
+        "legend": {
+          "showLegend": false
+        }
+      }
+    },
+    {
+      "id": 6,
+      "title": "Distribución de Calificaciones (Franjas)",
+      "type": "barchart",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "tup-postgres"
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 4
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "tup-postgres"
+          },
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT franja_rating AS \"Franja\", COUNT(*) AS \"Cursos\"\nFROM cursos WHERE nivel_label IN (${nivel:sqlstring}) AND segmento_precio IN (${segmento:sqlstring})\nGROUP BY franja_rating ORDER BY franja_rating;"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "green"
+          },
+          "unit": "short"
+        }
+      },
+      "options": {
+        "xField": "Franja",
+        "orientation": "vertical",
+        "showValue": "auto",
+        "legend": {
+          "showLegend": false
+        }
+      }
+    },
+    {
+      "id": 7,
+      "title": "Cursos por Segmento de Precio",
+      "type": "piechart",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "tup-postgres"
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 8,
+        "x": 0,
+        "y": 13
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "tup-postgres"
+          },
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT segmento_precio AS \"Segmento\", COUNT(*) AS \"Cursos\"\nFROM cursos WHERE nivel_label IN (${nivel:sqlstring}) AND segmento_precio IN (${segmento:sqlstring})\nGROUP BY segmento_precio ORDER BY 2 DESC;"
+        }
+      ],
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "values": true
+        },
+        "pieType": "donut",
+        "legend": {
+          "displayMode": "table",
+          "placement": "right",
+          "values": [
+            "value",
+            "percent"
+          ]
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short"
+        }
+      }
+    },
+    {
+      "id": 8,
+      "title": "Ratio Reseñas/Estudiante por Nivel",
+      "type": "barchart",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "tup-postgres"
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 16,
+        "x": 8,
+        "y": 13
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "tup-postgres"
+          },
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT nivel_label AS \"Nivel\", ROUND(AVG(ratio_reviews)::numeric,3) AS \"Ratio Reseñas/Estud.\"\nFROM cursos WHERE nivel_label IN (${nivel:sqlstring}) AND segmento_precio IN (${segmento:sqlstring})\nGROUP BY nivel_label ORDER BY 2 DESC;"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-BlPu"
+          },
+          "unit": "short"
+        }
+      },
+      "options": {
+        "xField": "Nivel",
+        "orientation": "horizontal",
+        "showValue": "auto",
+        "legend": {
+          "showLegend": false
+        }
+      }
+    },
+    {
+      "id": 9,
+      "title": "Top 15 Cursos por Cantidad de Estudiantes",
+      "type": "table",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "tup-postgres"
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 24,
+        "x": 0,
+        "y": 22
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "tup-postgres"
+          },
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT course_name AS \"Curso\", instructor AS \"Instructor\",\n       students_count AS \"Estudiantes\", reviews_avg AS \"Rating\",\n       price_after_discount AS \"Precio\", course_flag AS \"Flag\"\nFROM cursos WHERE nivel_label IN (${nivel:sqlstring}) AND segmento_precio IN (${segmento:sqlstring})\nORDER BY students_count DESC LIMIT 15;"
+        }
+      ],
+      "options": {
+        "showHeader": true,
+        "cellHeight": "sm",
+        "footer": {
+          "show": false
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "filterable": true
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Rating"
+            },
+            "properties": [
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "red",
+                      "value": null
+                    },
+                    {
+                      "color": "orange",
+                      "value": 3.5
+                    },
+                    {
+                      "color": "green",
+                      "value": 4.5
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "refresh": "",
+  "schemaVersion": 39,
+  "tags": [
+    "tup",
+    "udemy",
+    "analisis-datos"
+  ],
+  "templating": {
+    "list": [
+      {
+        "name": "nivel",
+        "type": "query",
+        "label": "Nivel",
+        "datasource": {
+          "type": "grafana-postgresql-datasource",
+          "uid": "tup-postgres"
+        },
+        "multi": true,
+        "includeAll": true,
+        "allValue": null,
+        "refresh": 2,
+        "sort": 1,
+        "definition": "SELECT DISTINCT nivel_label FROM cursos ORDER BY 1",
+        "query": {
+          "rawSql": "SELECT DISTINCT nivel_label FROM cursos ORDER BY 1",
+          "refId": "tpl"
+        },
+        "current": {
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        }
+      },
+      {
+        "name": "segmento",
+        "type": "query",
+        "label": "Segmento de Precio",
+        "datasource": {
+          "type": "grafana-postgresql-datasource",
+          "uid": "tup-postgres"
+        },
+        "multi": true,
+        "includeAll": true,
+        "allValue": null,
+        "refresh": 2,
+        "sort": 1,
+        "definition": "SELECT DISTINCT segmento_precio FROM cursos ORDER BY 1",
+        "query": {
+          "rawSql": "SELECT DISTINCT segmento_precio FROM cursos ORDER BY 1",
+          "refId": "tpl"
+        },
+        "current": {
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        }
+      }
+    ]
+  },
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "Panel de Control – Análisis de Cursos Udemy (TUP)",
+  "uid": "tup-udemy-dash",
+  "version": 1,
+  "weekStart": ""
+}
